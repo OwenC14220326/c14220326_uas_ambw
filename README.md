@@ -1,172 +1,216 @@
-Simple Recipe Keeper
+## DUMMY
+**Dummy 1**
+- email: nichocage@gmail.com
+- password: 123456
 
-Aplikasi Flutter untuk menyimpan dan mengelola resep pribadi, menggunakan Firebase Authentication, Firestore Database, dan Hive untuk session persistence.
-
----
-
-## ✨ Fitur Utama
-
-### ✅ Authentication (20 poin)
-
-- Menggunakan **Firebase Authentication**.
-- Fitur:
-  - **Sign Up** (pendaftaran pengguna baru).
-  - **Sign In** (login pengguna).
-  - **Sign Out** (logout).
-- Validasi input:
-  - Email wajib format valid.
-  - Password minimal 6 karakter.
-  - Pesan kesalahan tampil jika login/signup gagal.
-
-📂 **Letak Implementasi:**
-- `signin_page.dart` dan `signup_page.dart`: Form validasi & autentikasi.
-- `homepage.dart`: Logout.
-- Semua validasi error via `_errorMessage`.
+**Dummy 2**
+- email: keanowen@gmail.com
+- password: 123456
 
 ---
 
-### ✅ Cloud Database (20 poin)
+## Petunjuk Build & Jalankan
 
-- Menggunakan **Firestore**.
-- Data resep tersimpan berdasarkan **UID pengguna**.
-- Fitur CRUD Resep:
-  - Tambah resep.
-  - Edit resep.
-  - (Opsional) Hapus resep.
-- Filtering resep sesuai UID login.
+1. **Clone repository**
 
-📂 **Letak Implementasi:**
-- `add_recipe_page.dart`:
+   ```bash
+   git clone <repository-url>
+   cd <repository-folder>
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   flutter pub get
+   ```
+
+3. **Tambahkan kredensial Firebase**
+
+   * Unduh file `google-services.json` dari Firebase Console.
+   * Letakkan di:
+
+     ```text
+     android/app/google-services.json
+     ```
+
+4. **Pastikan konfigurasi `build.gradle.kts`**
+
+   ```kotlin
+   ndkVersion = "27.0.12077973" // tergantung versi Android
+   defaultConfig {
+       minSdkVersion(23)
+       targetSdkVersion(34)
+   }
+   ```
+
+5. **Jalankan aplikasi**
+
+   ```bash
+   flutter run
+   ```
+
+---
+
+## Keterangan Aplikasi Simple Recipe Keeper
+
+### Authentication
+
+Menggunakan **Firebase Auth**.
+
+**Fitur:**
+
+* Sign Up, Sign In, Sign Out
+* Validasi input & pesan error
+
+**Letak Implementasi:**
+
+* `signin_page.dart`
+
+  * Form login dengan validasi email & password
+  * Error handling (`_errorMessage`)
+* `signup_page.dart`
+
+  * Form pendaftaran dengan validasi
+* `home_page.dart`
+
+  * Tombol logout:
+
+    ```dart
+    FirebaseAuth.instance.signOut()
+    ```
+
+---
+
+### Cloud Database
+
+Menggunakan **Firestore**.
+
+**Fitur:**
+
+* Menyimpan resep berdasarkan UID pengguna yang login
+* Hanya menampilkan resep pribadi user tersebut
+
+**Letak Implementasi:**
+
+* `add_recipe_page.dart`:
+
   ```dart
-  'uid_pembuat': FirebaseAuth.instance.currentUser?.uid,
-homepage.dart:
+  'uid_pembuat': FirebaseAuth.instance.currentUser?.uid
+  ```
+* `home_page.dart`:
 
-dart
-Copy
-Edit
-.where('uid_pembuat', isEqualTo: uid)
-✅ Session Persistence (20 poin)
-Menggunakan Hive.
+  ```dart
+  .where('uid_pembuat', isEqualTo: uid)
+  ```
 
-Menyimpan informasi login agar pengguna tetap login setelah menutup aplikasi.
+**Firestore Collections:**
 
-Mengecek session saat startup.
+* `users` (untuk autentikasi)
+* `recipes` (untuk data resep)
 
-📂 Letak Implementasi:
+**Screenshot contoh data:**
+![image](https://github.com/user-attachments/assets/3cd1f826-838a-4753-8cb1-7fcd67b0e2ea)
+![image](https://github.com/user-attachments/assets/663de39b-88e4-4acd-b954-331494ac2d4b)
+![image](https://github.com/user-attachments/assets/6f2639a9-13a3-4c80-800e-52a0c3fd8a97)
 
-signin_page.dart:
 
-dart
-Copy
-Edit
-final sessionBox = Hive.box('sessionBox');
-await sessionBox.put('uid', userCredential.user?.uid);
-main.dart:
+---
 
-dart
-Copy
-Edit
-final uid = sessionBox.get('uid');
-if (uid != null) {
-  // Langsung ke halaman Home
-}
-✅ Get Started Screen (20 poin)
-Halaman Get Started hanya tampil saat pertama kali aplikasi dibuka.
+### Session Persistence
 
+Menggunakan **Hive** untuk menyimpan sesi login.
+Simpan informasi login agar user tidak perlu login ulang.
+
+**Letak Implementasi:**
+
+* `signin_page.dart`:
+
+  ```dart
+  final box = Hive.box('sessionBox');
+  await box.put('uid', userCredential.user?.uid);
+  ```
+* `main.dart`:
+
+  ```dart
+  Hive.box('sessionBox').get('uid')
+  ```
+
+  * Jika ada UID: langsung ke HomePage
+  * Jika tidak: ke SignIn
+
+---
+
+### Get Started Screen
+
+Tampil hanya saat pertama kali aplikasi dibuka.
 Jika sudah pernah dibuka, langsung ke login/home.
 
-📂 Letak Implementasi:
+**Letak Implementasi:**
 
-get_started_page.dart: Tampilan Get Started.
+* `get_started_page.dart`
+* `main.dart`:
 
-main.dart:
+  ```dart
+  final onboardingBox = Hive.box('onboardingBox');
+  final isFirstTime = onboardingBox.get('isFirstTime', defaultValue: true);
+  ```
 
-dart
-Copy
-Edit
-final onboardingBox = Hive.box('onboardingBox');
-final isFirstTime = onboardingBox.get('isFirstTime', defaultValue: true);
-if (isFirstTime) {
-  // Tampilkan GetStarted
-} else {
-  // Langsung ke SignIn atau Home
-}
-Setelah Get Started:
+  * Jika `isFirstTime == true`, tampilkan Get Started
+  * Setelah selesai:
 
-dart
-Copy
-Edit
-onboardingBox.put('isFirstTime', false);
-✅ Desain Navigasi & UI (10 poin)
-Navigasi menggunakan Navigator.pushNamed().
+    ```dart
+    onboardingBox.put('isFirstTime', false);
+    ```
+  * Tidak muncul lagi
 
-Routing konsisten dan rapi.
+---
 
-UI sederhana dan fungsional:
+### Desain Navigasi & UI
 
-AppBar.
+Navigasi antar halaman rapi dan intuitif menggunakan **Navigator**.
+UI sederhana namun fungsional.
 
-ListTile untuk daftar resep.
+**Letak Implementasi:**
 
-TextField untuk input data.
+* `main.dart`:
 
-ElevatedButton untuk aksi.
+  ```dart
+  MaterialApp(
+    routes: {
+      '/signin': (_) => const SignInPage(),
+      '/signup': (_) => const SignUpPage(),
+      '/home': (_) => const HomePage(),
+      '/add-recipe': (_) => const AddRecipePage(),
+      '/edit-recipe': (_) => const EditRecipePage(),
+      '/detail-recipe': (_) => const DetailRecipePage(),
+    },
+  )
+  ```
+* Navigasi konsisten:
 
-Validasi form input.
+  ```dart
+  Navigator.pushNamed(context, '/edit-recipe', arguments: doc);
+  ```
+* UI komponen:
 
-📂 Letak Implementasi:
+  * `TextField`
+  * `ListTile`
+  * `ElevatedButton`
 
-main.dart:
+---
 
-dart
-Copy
-Edit
-routes: {
-  '/get-started': (_) => const GetStartedPage(),
-  '/signin': (_) => const SignInPage(),
-  '/signup': (_) => const SignUpPage(),
-  '/home': (_) => const HomePage(),
-  '/add-recipe': (_) => const AddRecipePage(),
-  '/edit-recipe': (_) => const EditRecipePage(),
-  '/detail-recipe': (_) => const DetailRecipePage(),
-}
-Navigasi antar halaman:
+## Struktur Folder
 
-dart
-Copy
-Edit
-Navigator.pushNamed(context, '/edit-recipe', arguments: doc);
-📂 Struktur Folder
-css
-Copy
-Edit
+```
 lib/
   main.dart
-  get_started_page.dart
-  signin_page.dart
-  signup_page.dart
-  home_page.dart
-  add_recipe_page.dart
-  edit_recipe_page.dart
-  detail_recipe_page.dart
-🚀 Cara Menjalankan
-Clone Repository
-
-bash
-Copy
-Edit
-git clone <repository-url>
-cd <repository-folder>
-Install Dependencies
-
-bash
-Copy
-Edit
-flutter pub get
-Jalankan
-
-bash
-Copy
-Edit
-flutter run
-Pastikan sudah menambahkan file google-services.json di folder android/app.
+  firebase_options.dart
+  pages/
+    get_started.dart
+    signin_page.dart
+    signup_page.dart
+    home_page.dart
+    add_recipe.dart
+    edit_recipe.dart
+    detail_recipe.dart
+```
