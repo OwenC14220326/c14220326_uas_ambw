@@ -109,10 +109,9 @@ Menggunakan **Firestore**.
 * `recipes` (untuk data resep)
 
 **Screenshot contoh data:**
-![image](https://github.com/user-attachments/assets/3cd1f826-838a-4753-8cb1-7fcd67b0e2ea)
-![image](https://github.com/user-attachments/assets/663de39b-88e4-4acd-b954-331494ac2d4b)
-![image](https://github.com/user-attachments/assets/6f2639a9-13a3-4c80-800e-52a0c3fd8a97)
-
+![image](https://github.com/user-attachments/assets/8623afc5-31d1-46fe-9db8-373b8e643f9f)
+![image](https://github.com/user-attachments/assets/a99bcc35-2f65-4449-a68e-d98f155fa456)
+![image](https://github.com/user-attachments/assets/d1667209-6886-4ddf-b44e-64f954342cd1)
 
 ---
 
