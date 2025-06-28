@@ -20,7 +20,6 @@ void main() async {
 
   await Hive.initFlutter();
 
-  // Buka box untuk simpan session
   await Hive.openBox('sessionBox');
 
   runApp(const SimpleRecipeKeeperApp());

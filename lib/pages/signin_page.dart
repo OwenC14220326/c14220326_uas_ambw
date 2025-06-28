@@ -66,7 +66,6 @@ class _SignInPageState extends State<SignInPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Logo
                 const Icon(Icons.restaurant_menu,
                     size: 80, color: Colors.deepOrange),
                 const SizedBox(height: 12),

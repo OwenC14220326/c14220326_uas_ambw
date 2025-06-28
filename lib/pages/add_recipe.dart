@@ -42,7 +42,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
       final namaPembuat = sessionBox.get('nama_lengkap') ?? 'Anonim';
 
       await FirebaseFirestore.instance.collection('recipes').add({
-        'uid_pembuat': uid, // Tambahkan UID pembuat
+        'uid_pembuat': uid, 
         'nama_pembuat': namaPembuat,
         'nama_resep': _namaController.text.trim(),
         'deskripsi_resep': _deskripsiController.text.trim(),
@@ -63,7 +63,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  Navigator.pop(context); // Kembali ke Home
+                  Navigator.pop(context); 
                 },
                 child: const Text('OK'),
               ),

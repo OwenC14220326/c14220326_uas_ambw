@@ -55,7 +55,6 @@ class _SignUpPageState extends State<SignUpPage> {
       await sessionBox.put('email', _emailController.text.trim());
       await sessionBox.put('nama_lengkap', _namaController.text.trim());
 
-      // Tampilkan konfirmasi
       if (context.mounted) {
         await showDialog(
           context: context,
@@ -65,7 +64,7 @@ class _SignUpPageState extends State<SignUpPage> {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context); // Tutup dialog
+                  Navigator.pop(context); 
                   Navigator.pushReplacementNamed(context, '/home');
                 },
                 child: const Text('OK'),

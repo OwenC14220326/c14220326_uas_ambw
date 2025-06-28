@@ -13,15 +13,19 @@ class DetailRecipePage extends StatelessWidget {
         title: const Text('Detail Resep'),
         backgroundColor: Colors.deepOrange,
       ),
-      body: StreamBuilder<DocumentSnapshot>(
-        stream: FirebaseFirestore.instance.collection('recipes').doc(docId).snapshots(),
+      body: FutureBuilder<DocumentSnapshot>(
+        future: FirebaseFirestore.instance.collection('recipes').doc(docId).get(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
 
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
           if (!snapshot.hasData || !snapshot.data!.exists) {
-            return const Center(child: Text('Resep tidak ditemukan.'));
+            return const Center(child: Text('Resep tidak ditemukan'));
           }
 
           final doc = snapshot.data!;
@@ -69,8 +73,7 @@ class DetailRecipePage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                if (deskripsi.isNotEmpty)
-                  Text(deskripsi),
+                if (deskripsi.isNotEmpty) Text(deskripsi),
                 const SizedBox(height: 16),
                 if (bahanList.isNotEmpty)
                   Column(
@@ -96,24 +99,67 @@ class DetailRecipePage extends StatelessWidget {
                     ],
                   ),
                 const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/edit-recipe',
-                        arguments: doc,
-                      );
-                    },
-                    icon: const Icon(Icons.edit),
-                    label: const Text('Edit Resep'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepOrange,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/edit-recipe',
+                            arguments: doc, 
+                          );
+                        },
+                        icon: const Icon(Icons.edit),
+                        label: const Text('Edit Resep'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepOrange,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                      ),
                     ),
-                  ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          final confirm = await showDialog<bool>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Hapus Resep'),
+                              content: const Text('Yakin ingin menghapus resep ini?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, false),
+                                  child: const Text('Batal'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () => Navigator.pop(context, true),
+                                  child: const Text('Hapus'),
+                                ),
+                              ],
+                            ),
+                          );
+                          if (confirm == true) {
+                            await FirebaseFirestore.instance
+                                .collection('recipes')
+                                .doc(doc.id)
+                                .delete();
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                            }
+                          }
+                        },
+                        icon: const Icon(Icons.delete),
+                        label: const Text('Hapus'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

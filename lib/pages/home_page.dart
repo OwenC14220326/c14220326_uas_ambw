@@ -65,7 +65,6 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: Column(
           children: [
-            // Search Bar
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
               child: TextField(
@@ -81,7 +80,6 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
-            // List Resep
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream:
@@ -90,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                         .where(
                           'uid_pembuat',
                           isEqualTo: uid,
-                        ) // 💡 FILTER HANYA RESEP USER INI
+                        ) 
                         .orderBy('created_at', descending: true)
                         .snapshots(),
                 builder: (context, snapshot) {
@@ -173,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                             Navigator.pushNamed(
                               context,
                               '/detail-recipe',
-                              arguments: data.id, // hanya ID
+                              arguments: data.id, 
                             );
                           },
                         ),

@@ -16,7 +16,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
   }
 
   Future<void> _checkSession() async {
-    await Future.delayed(const Duration(seconds: 2)); // Simulasi loading
+    await Future.delayed(const Duration(seconds: 3)); 
     final sessionBox = Hive.box('sessionBox');
     final uid = sessionBox.get('uid');
 
