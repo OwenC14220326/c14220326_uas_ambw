@@ -1,53 +1,4 @@
-## DUMMY
-**Dummy 1**
-- email: nichocage@gmail.com
-- password: 123456
-
-**Dummy 2**
-- email: keanowen@gmail.com
-- password: 123456
-
----
-
-## Petunjuk Build & Jalankan
-
-1. **Clone repository**
-
-   ```bash
-   git clone <repository-url>
-   cd <repository-folder>
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   flutter pub get
-   ```
-
-3. **Tambahkan kredensial Firebase**
-
-   * Unduh file `google-services.json` dari Firebase Console.
-   * Letakkan di:
-
-     ```text
-     android/app/google-services.json
-     ```
-
-4. **Pastikan konfigurasi `build.gradle.kts`**
-
-   ```kotlin
-   ndkVersion = "27.0.12077973" // tergantung versi Android
-   defaultConfig {
-       minSdkVersion(23)
-       targetSdkVersion(34)
-   }
-   ```
-
-5. **Jalankan aplikasi**
-
-   ```bash
-   flutter run
-   ```
+## SIMPLE RECIPE KEEPER
 
 ---
 
@@ -198,6 +149,15 @@ UI sederhana namun fungsional.
 
 ---
 
+### Fitur Tambahan
+* edit_recipe.dart: Edit resep agar pengguna bisa mengubah resep yang sudah ditambahkan.
+* detail_recipe.dart: Detail resep agar pengguna bisa membaca resep di home page dengan mudah dan bisa melihat detail resepnya ketika resep dipencet.
+* dalam detail_recipe.dart: Delete resep agar pengguna bisa menghapus resep yang sudah ditambahkan.
+* Atribut tambahan seperti foto_url dan nama_pembuat pada collection recipes.
+* Atribut tambahan nama_lengkap pada collection users.
+
+---
+
 ## Struktur Folder
 
 ```
@@ -213,3 +173,87 @@ lib/
     edit_recipe.dart
     detail_recipe.dart
 ```
+
+---
+
+## Petunjuk Build & Jalankan
+
+1. **Clone repository**
+
+   ```bash
+   git clone <repository-url>
+   cd <repository-folder>
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   flutter pub get
+   ```
+
+3. **Tambahkan kredensial Firebase**
+
+   * Unduh file `google-services.json` dari Firebase Console.
+   * Letakkan di:
+
+     ```text
+     android/app/google-services.json
+     ```
+
+4. **Pastikan konfigurasi `build.gradle.kts`**
+
+   ```kotlin
+   ndkVersion = "27.0.12077973" // tergantung versi Android
+   defaultConfig {
+       minSdkVersion(23)
+       targetSdkVersion(34)
+   }
+   ```
+
+5. **Jalankan aplikasi**
+
+   ```bash
+   flutter run
+   ```
+
+---
+## Teknologi yang Digunakan
+
+### **Firebase**
+
+* **Authentication**: Sign Up, Sign In, Sign Out dengan validasi email/password.
+* **Firestore**: Simpan data resep real-time berdasarkan UID pengguna.
+
+---
+
+### **Hive**
+
+* **Session Persistence**: Simpan UID login agar tidak perlu login ulang.
+* **Onboarding Tracking**: Cek apakah pengguna sudah lewat halaman Get Started.
+
+---
+
+### **Flutter**
+
+* **UI & Navigasi**: MaterialApp, Navigator, widget standar (TextField, ElevatedButton).
+* **State Management**: `StatefulWidget` + `setState`.
+
+---
+
+### **Dependencies utama**
+
+* `firebase_core`, `firebase_auth`, `cloud_firestore`
+* `hive_flutter`, `path_provider`
+
+---
+
+## DUMMY
+**Dummy 1**
+- email: nichocage@gmail.com
+- password: 123456
+
+**Dummy 2**
+- email: keanowen@gmail.com
+- password: 123456
+
+---
